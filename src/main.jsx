@@ -7,13 +7,16 @@ import { MainContextProvider } from "./context/MainContext";
 import "react-toastify/dist/ReactToastify.css";
 
 import { Provider } from "react-redux";
-import { store } from "./store";
+import { persistor, store } from "./store";
+import { PersistGate } from "redux-persist/integration/react";
 ReactDOM.render(
   <MainContextProvider>
     <React.StrictMode>
       <Router>
         <Provider store={store}>
-          <App />
+          <PersistGate persistor={persistor}>
+            <App />
+          </PersistGate>
         </Provider>
       </Router>
     </React.StrictMode>

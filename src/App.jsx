@@ -4,6 +4,7 @@ import { Home, MapView, RestaurantsList, AttractionsList, SearchResult } from ".
 import { PlaceDetails } from "./pages/templates";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
+import CheckOut from "./pages/CheckOut";
 
 const App = () => {
   return (
@@ -32,6 +33,9 @@ const App = () => {
         </Route>
         <Route path={"/cart"}>
           <Cart/>
+        </Route>
+        <Route path={"/checkout"}>
+          <CheckOut/>
         </Route>
         
       </Switch>

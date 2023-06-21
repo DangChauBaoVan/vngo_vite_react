@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   account:[],
-  login:false
+  isLoggedIn:false
 }
 
 export const loginSlice = createSlice({
@@ -12,12 +12,16 @@ export const loginSlice = createSlice({
     
     loginSuccess: (state, action) => {
       state.account = action.payload,
-      state.login = true
+      state.isLoggedIn = true
     },
+    logout:(state,action)=>{
+      state.account=[],
+      state.isLoggedIn = false
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const {loginSuccess } = loginSlice.actions
+export const {loginSuccess,logout } = loginSlice.actions
 
 export default loginSlice.reducer

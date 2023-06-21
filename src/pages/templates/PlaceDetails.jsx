@@ -9,11 +9,14 @@ import { Loader, PlaceDetailsLoader } from "../../components/loaders";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../features/cart/cartSlice";
 
 const PlaceDetails = () => {
   const { type, id } = useParams(); // Destucturing 'type' and 'id' from route parameter
   const [place, setPlace] = useState();
   const [reviews, setReviews] = useState();
+  const dispatch = useDispatch();
 
   // Effect to fetch place details from getPlaceDetails endpoint and Effect is reran dependent on 'type' or 'id' change
   useEffect(() => {
@@ -28,6 +31,11 @@ const PlaceDetails = () => {
       source.cancel();
     };
   }, [type, id]);
+
+  const handleAddToCart = () => {
+    
+    dispatch(addToCart(place))
+  }
 
   return (
     <div className="relative">
@@ -274,11 +282,11 @@ const PlaceDetails = () => {
               </div>
             </div>
             <div className="top-right-content">
-              <Link to={"/cart"}>
-                <div className="sign-in pt-2 pb-2 pl-3 pr-3 bg-black border border-white text-white rounded-full mx-2 hover:bg-white hover:border hover:border-black hover:text-black ease-in duration-500">
+              <div className="addItemToCart" onClick={handleAddToCart}>
+                <div className="sign-in pt-2 pb-2 pl-3 pr-3 bg-black border border-white text-white rounded-full mx-2 hover:bg-white hover:border hover:border-black hover:text-black ease-in duration-500 cursor-pointer">
                   <button className="addToCart">Add to Cart</button>
                 </div>
-              </Link>
+              </div>
             </div>
           </div>
 
