@@ -1,13 +1,15 @@
 import React from "react";
 import Header from "../components/Header";
 import { Footer } from "../components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import suitcase from "../img/suitcase.svg";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import moment from "moment";
+import { removeFromCart } from "../features/cart/cartSlice";
 
 function Cart() {
   let items = useSelector((state) => state.cart.items);
+  const dispatch = useDispatch();
 
   const generateRandomDate = (from, to) => {
     return new Date(
@@ -17,30 +19,45 @@ function Cart() {
   const formatDate = (date) => {
     return `${moment(date).format("LL")} | ${moment(date).format("LT")}`;
   };
-
+  const removeItemFromCart = (id) => {
+    
+    dispatch(removeFromCart(id))
+  };
   const renderItems = () => {
     return items.map((item, index) => {
       return (
-        <div className="cart-left-item flex mb-5 items-center" key={index}>
-          <div className="place-image mr-2">
-            <img
-              src={item.photo.images.original.url}
-              className="w-36 h-36"
-              alt="place-image"
-            />
+        <>
+          <div className="cart-left-item flex mb-4 " key={index}>
+            <div className="place-image mr-4">
+              <img
+                src={item.photo.images.original.url}
+                className="w-36 h-36"
+                alt="place-image"
+              />
+              <h1 className="underline font-semibold cursor-pointer mt-2 " onClick={()=>removeItemFromCart(item.location_id)}>
+                Remove
+              </h1>
+            </div>
+            <div className="place-info">
+              <Link to={`/attractions/${item.location_id}`}>
+                <h1 className="text-2xl font-semibold mb-2 hover:underline hover:cursor-pointer duration-700 hover:text-gray-500">
+                  {item.name}
+                </h1>
+              </Link>
+
+              <p className="mb-2">Small group with meeting point - 6pm </p>
+              <p className="mb-2">
+                {formatDate(
+                  generateRandomDate(new Date(), new Date(2023, 11, 31))
+                )}
+              </p>
+              <p className="mb-2">3 adults x 700,000</p>
+              <p>Total: 2,100,000</p>
+            </div>
           </div>
-          <div className="place-info">
-            <h1 className="text-2xl font-semibold mb-2">{item.name}</h1>
-            <p className="mb-2">Small group with meeting point - 6pm </p>
-            <p className="mb-2">
-              {formatDate(
-                generateRandomDate(new Date(), new Date(2023, 11, 31))
-              )}
-            </p>
-            <p className="mb-2">3 adults x 700,000</p>
-            <p>Total: 2,100,000</p>
-          </div>
-        </div>
+
+          <div className={`divider border border-dashed border-b-0 border-gray-400 mb-4 ${items.length > 1 ? "block" : "hidden"}`}></div>
+        </>
       );
     });
   };

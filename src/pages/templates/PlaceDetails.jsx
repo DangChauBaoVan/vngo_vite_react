@@ -9,7 +9,7 @@ import { Loader, PlaceDetailsLoader } from "../../components/loaders";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../features/cart/cartSlice";
 
 const PlaceDetails = () => {
@@ -31,16 +31,36 @@ const PlaceDetails = () => {
       source.cancel();
     };
   }, [type, id]);
-
+  let items = useSelector((state) => state.cart.items);
   const handleAddToCart = () => {
-    
-    dispatch(addToCart(place))
-  }
+    dispatch(addToCart(place));
+  };
+  const renderButton = () => {
+    let index = items.findIndex(
+      (item) => item?.location_id === place?.location_id
+    );
+    if (index === -1)
+      return (
+        <div className="addItemToCart" onClick={handleAddToCart}>
+          <div className="sign-in pt-2 pb-2 pl-3 pr-3 bg-black border border-white text-white rounded-full mx-2 hover:bg-white hover:border hover:border-black hover:text-black ease-in duration-500 cursor-pointer">
+            <button className="addToCart">Add to Cart</button>
+          </div>
+        </div>
+      );
+    else return(
+      <div className="addItemToCart" >
+                <div className="sign-in pt-2 pb-2 pl-3 pr-3 bg-black border border-white text-white rounded-full mx-2 ">
+                  <button className="addToCart">Already Add To Cart</button>
+                </div>
+              </div>
+    )
+  };
+  renderButton();
 
   return (
     <div className="relative">
       {/* Navbar with border */}
-      <Header/>
+      <Header />
       {/* -- */}
 
       {/* Place Details */}
@@ -282,11 +302,7 @@ const PlaceDetails = () => {
               </div>
             </div>
             <div className="top-right-content">
-              <div className="addItemToCart" onClick={handleAddToCart}>
-                <div className="sign-in pt-2 pb-2 pl-3 pr-3 bg-black border border-white text-white rounded-full mx-2 hover:bg-white hover:border hover:border-black hover:text-black ease-in duration-500 cursor-pointer">
-                  <button className="addToCart">Add to Cart</button>
-                </div>
-              </div>
+              {renderButton()}
             </div>
           </div>
 
